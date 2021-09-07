@@ -58,10 +58,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 file= new File("res/bensound-jazzyfrenchy.wav");
             }
             if(file.exists()){
-                System.out.println(file.getName());
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+                AudioInputStream ais = AudioSystem.getAudioInputStream( Game.class.getResource( file.getName() ) );
                 Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
+                clip.open(ais);
                 clip.start();
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
@@ -75,27 +74,33 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
 
     public void paint(Graphics g){
+        //background
         g.setColor(Color.BLACK);    //background color is black
         g.fillRect(1, 1, 692, 592);
 
+        //draw the map
         map.draw((Graphics2D) g);
 
-        g.setColor(Color.RED);  //displaying the border
+        //displaying the border
+        g.setColor(Color.RED);
         g.fillRect(0, 0, 3, 592);   //top border
         g.fillRect(0, 0, 692, 3);   //left border
         g.fillRect(692, 0, 3, 592); //right border
 
-        g.setColor(Color.blue); //player display
+        //player display
+        g.setColor(Color.blue);
         g.fillRect(playerX, 550, 100, 8);
 
-        g.setColor(Color.green);    //ball display
+        //ball display
+        g.setColor(Color.green);
         g.fillOval(ballPositionX, ballPositionY, 20, 20);
 
         //display score
         g.setColor(Color.white);
         g.setFont(new Font("serif", Font.BOLD, 25));
         g.drawString("Score: " + score, 590, 30);
-        //user wins
+
+        //user knocks clears field
         if(numberOfBricks <= 0){
             numberOfBricks = row * column;
             map = new MapCreator(row, column);
@@ -134,11 +139,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             for(int i = 0; i < map.map.length; i++){
                 for(int j = 0; j < map.map[0].length; j++){
                     if(map.map[i][j] != 0){
-
                         Rectangle brick = new Rectangle(j * map.width + 50, i * map.height + 50, map.width, map.height);
-                        Rectangle copy = brick;
                         Rectangle ball = new Rectangle(ballPositionX, ballPositionY, 20, 20);
-
                         if(ball.intersects(brick)){
                             map.brickValue(0, i, j);
                             numberOfBricks--;
@@ -149,6 +151,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                     }
                 }
             }
+
+            //how ball moves
             ballPositionX += ballXDir;
             ballPositionY += ballYDir;
 
@@ -163,20 +167,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             }
         }
         repaint();
-    }
-
-    /**
-     * Redirect ball when hitting brick
-     * @param brick
-     */
-
-    public void redirectBall(Rectangle brick){
-        if(ballPositionX + 19 <= brick.x || ballPositionX + 1 >= brick.x + brick.width){
-            ballXDir = -ballXDir;
-        }
-        else {
-            ballYDir = -ballYDir;
-        }
     }
 
     @Override
@@ -200,6 +190,20 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         //if the game is over press any key
         else if(!play){
             restart();
+        }
+    }
+
+    /**
+     * Redirect ball when hitting brick
+     * @param brick
+     */
+
+    public void redirectBall(Rectangle brick){
+        if(ballPositionX + 19 <= brick.x || ballPositionX + 1 >= brick.x + brick.width){
+            ballXDir = -ballXDir;
+        }
+        else {
+            ballYDir = -ballYDir;
         }
     }
 
