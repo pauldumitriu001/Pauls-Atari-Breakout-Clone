@@ -52,10 +52,10 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             Random ran = new Random();
             File file;
             if(ran.nextBoolean()){
-                file = new File("src/bensound-happyrock.wav");
+                file = new File("res/bensound-happyrock.wav");
             }
             else{
-                file= new File("src/bensound-jazzyfrenchy.wav");
+                file= new File("res/bensound-jazzyfrenchy.wav");
             }
             if(file.exists()){
                 System.out.println(file.getName());
