@@ -58,7 +58,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 file= new File("res/bensound-jazzyfrenchy.wav");
             }
             if(file.exists()){
-                AudioInputStream ais = AudioSystem.getAudioInputStream( Game.class.getResource( file.getName() ) );
+//                AudioInputStream ais = AudioSystem.getAudioInputStream( Game.class.getResource( file.getName() ) );
+                AudioInputStream ais = AudioSystem.getAudioInputStream(file);
                 Clip clip = AudioSystem.getClip();
                 clip.open(ais);
                 clip.start();
